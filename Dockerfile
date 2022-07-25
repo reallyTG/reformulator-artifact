@@ -3,7 +3,12 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Fetch prerequisites.
 RUN apt-get update \
-	&& apt-get -y install --no-install-recommends git unzip vim curl nodejs npm parallel silversearcher-ag
+	&& apt-get -y install --no-install-recommends git unzip vim curl npm parallel silversearcher-ag
+
+# Need to do this to get Node.js v16 on Debian.
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+RUN apt-get install -y nodejs
+
 
 RUN apt update
 
@@ -30,6 +35,7 @@ WORKDIR /home/reformulator
 RUN git clone https://github.com/reallyTG/orm-refactoring.git
 WORKDIR /home/reformulator/orm-refactoring
 RUN npm i
+RUN npm i -g typescript
 RUN npm run build
 WORKDIR /home/reformulator
 
@@ -46,7 +52,10 @@ RUN git clone https://github.com/reallyTG/reformulator-analysis.git
 # WIP: Working on the evaluation script right now.
 #
 
-RUN /makeEvaluation.sh
+WORKDIR /home
+COPY makeEvaluation.sh /home
+COPY scripts /home/scripts
+RUN ./makeEvaluation.sh
 
 #
 # /end WIP

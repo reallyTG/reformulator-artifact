@@ -6,4 +6,6 @@ mkdir /home/evaluation/query-results
 mkdir /home/evaluation/QLDBs
 
 # Bring scripts over.
-cp -r /scripts /home/evaluation/scripts
+mv /home/scripts /home/evaluation/scripts
+
+rm makeEvaluation.sh
