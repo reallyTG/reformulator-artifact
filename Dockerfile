@@ -9,8 +9,21 @@ RUN apt update
 
 RUN npm i --g yarn
 
-# Create and move to source code directory.
+# Create source code directory.
 RUN mkdir -p /home/reformulator
+
+# Before grabbing sources, install CodeQL. 
+COPY setupCodeQL.sh /home
+WORKDIR /home
+
+# Misc. setup
+RUN git config --global http.sslVerify "false"
+RUN npm config set strict-ssl false
+
+# Run CodeQL setup script.
+RUN ./setupCodeQL.sh
+
+# Go to source directory.
 WORKDIR /home/reformulator
 
 # Fetch transformation source code.
@@ -33,7 +46,11 @@ RUN git clone https://github.com/reallyTG/reformulator-analysis.git
 # WIP: Working on the evaluation script right now.
 #
 
+RUN /makeEvaluation.sh
 
+#
+# /end WIP
+#
 
 
 # Now, create directory hierarchy for the evaluation.
@@ -41,34 +58,17 @@ RUN git clone https://github.com/reallyTG/reformulator-analysis.git
 # --> /evaluation
 # ----> /case-studies
 # ------> /<one-dir-for-each-project-in-evaluation>
-# ----> /drasync-artifact-scripts
+# ----> /scripts
 # ----> /query-results
-# ----> /processed-query-results
-# ----> /collected-anti-patterns
-# ----> /collected-results
 # ----> /QLDBs
-# ----> /processed-results
-# ----> /proj-stats
-# ----> /performance-case-studies
 
 # Set working directory above sources and tests.
-WORKDIR /home
+# WORKDIR /home
 
 # Make the evaluation
-COPY makeEvaluation.sh /home
-RUN ./makeEvaluation.sh
+# COPY makeEvaluation.sh /home
+# RUN ./makeEvaluation.sh
 
 # Make sure we're still home.
-WORKDIR /home
+# WORKDIR /home
 
-# Expose port 8080 for the visualization.
-# I don't think we need this if we run docker as it says to run it in the readme.
-# EXPOSE 8080
-
-# Misc. setup
-RUN git config --global http.sslVerify "false"
-RUN npm config set strict-ssl false
-
-# Run the script to download and build CodeQL.
-COPY setupCodeQL.sh /home
-RUN ./setupCodeQL.sh
