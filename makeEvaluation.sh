@@ -21,8 +21,8 @@ cd youtubeclone-backend
 git checkout orm-refactoring-original
 # Frontend repo doesn't need to have a branch change.
 
-# Back up.
-cd ..
+# Back up out of youtubeclone parent dir.
+cd ../..
 
 git clone https://github.com/TaintAnalysis-DB-Benchmarks/NetSteam
 cd NetSteam
@@ -59,4 +59,4 @@ cd employee-tracker
 git checkout orm-refactoring-original
 cd ..
 
-rm makeEvaluation.sh
+rm /home/makeEvaluation.sh

@@ -9,8 +9,8 @@ query=$2
 pathToQuery=$queryLocation/$2.ql
 
 # Constants
-QLDBs=/data/TaintAnalysis/QLDBs
-Results=/data/TaintAnalysis/QueryResults/$query
+QLDBs=/home/evaluation/QLDBs
+Results=/home/evaluation/query-results/$query
 
 mkdir -p $Results
 

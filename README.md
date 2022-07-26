@@ -42,3 +42,25 @@ The structure of the Docker container is as follows:
 ----> /QLDBs
 --> /codeql_home
 ```
+
+# Gist / Sanity Check / Kick-the-Tires
+
+This section illustrates the general workflow of the artifact with `youtubeclone` as exemplar.
+This section assumes you are in the Docker container.
+(Running through this section should confirm that the artifact is operational.)
+
+### 1. Run CodeQL
+
+*Reformulator* has two phases: first, dataflow between ORM API calls are detected via analysis, and then related ORM API calls are transformed.
+This section describes how to detect the dataflows using CodeQL.
+
+1.  CodeQL runs on a database built up from the source code.
+    (For the interested, the database contains an AST representation of the code, as well as control flows and data flows.)
+    To build this database, we included a convenience script `/home/evaluation/scripts/make-database.sh` which takes two arguments: the path to the code, and the name of the project.
+    For the purpose of this example, navigate to the `evaluation` directory and run `make-database.sh`:
+
+```
+cd /home/evaluation
+./scripts/make-database.sh ./case-studies/youtubeclone/ youtubeclone-backend
+```
+    This should produce a bunch of terminal output, with "Successfully created database at /home/evaluation/QLDBs/youtubeclone-backend" at the end.
