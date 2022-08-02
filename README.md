@@ -486,7 +486,48 @@ We estimated the time it took from refresh to full data population from this scr
 
 ## **RQ5**
 
-TODO
+In the last phase of the evaluation, we investigated how long it took our took to run, and we included the package installation time as a reference.
+We used the Unix `time` command for this.
+
+### Installation
+
+To get the install time, remove the node modules from a project `rm -rf node_modules` and then `time npm i`.
+E.g., with `employee_tracker`:
+```
+cd /home/evaluation/case-studies/employee_tracker
+rm -rf node_modules
+time npm i
+# Lots of output, including
+# real	0m15.548s # wall clock time, irrelevant
+# user	0m4.021s  # time taken to deal with user cod
+# sys	0m8.097s  # system time
+#                 # total time = user time + sys time
+```
+
+### QLDB Build Time
+
+To run the query, the QLDB needs to be built for the project being analyzed.
+To time it, e.g., with `employee_tracker`:
+```
+cd /home/evaluation
+# Make sure that /home/evaluation/QLDBs/employee-tracker is gone, i.e.,
+# rm -rf /home/evaluation/QLDBs/employee-tracker
+time ./scripts/make-database.sh ./case-studies/ employee-tracker
+```
+
+### Query Run Time
+
+To run the query in earnest, we have the helper script.
+You can time it with Unix time, e.g., with `employee_tracker`:
+```
+time ./scripts/run-query.sh employee-tracker find-sequelize-flows
+```
+**Note**: the first run ever of the query will take substantially longer as CodeQL needs to compile the QL query.
+So make sure to run it once just to shake that out.
+
+### Transformation Time
+
+This is usually basically instantaneous, and we didn't bother counting it.
 
 ## Data Description
 
