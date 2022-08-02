@@ -5,6 +5,8 @@ You'll be most interested in the first five sections (Notes, Building the Image,
 For posterity I have included them here, but please consider just reading the README instead. 
 Thanks!
 
+FYI: You can complete the 'Sanity Check' or 'Kick-the-Tires' section of these instructions once you have the artifact running to confirm that everything is working.
+
 # NOTES
 
 - If you're building this locally, make sure to `chmod +x setupCodeQL.sh makeEvaluation.sh setupProjects.sh seedForDeepDive.sh` to give Docker permission to run the scripts.
