@@ -32,8 +32,6 @@ docker build -t reformulator .
 
 The image itself is just shy of 5GB.
 
-**If you are coming from Zenodo**: instead, simply navigate into the reformulator-artifact directory, and run `docker build -t reformulator .`. 
-
 # Running the Image
 
 The following command will launch the Reformulator Docker container in daemon mode, meaning that the docker container is running in the background and can be connected to.
