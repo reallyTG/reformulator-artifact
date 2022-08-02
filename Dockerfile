@@ -1,14 +1,14 @@
-FROM debian:latest
+FROM ubuntu:latest
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Fetch prerequisites.
 RUN apt-get update \
-	&& apt-get -y install --no-install-recommends git unzip vim curl npm parallel silversearcher-ag
+	&& apt-get -y install --no-install-recommends git unzip vim curl npm parallel silversearcher-ag postgresql wget
+# [...] postgresql postgresql-contrib wget
 
 # Need to do this to get Node.js v16 on Debian.
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
 RUN apt-get install -y nodejs
-
 
 RUN apt update
 
@@ -42,25 +42,11 @@ WORKDIR /home/reformulator
 # Fetch source code for the query.
 RUN git clone https://github.com/reallyTG/reformulator-analysis.git
 
-# The above results in the following hierarchy:
+# The above few steps result in the following hierarchy:
 # /home
 # --> /reformulator
 # ----> /orm-refactoring        (The actual code transformation.)
 # ----> /reformulator-analysis  (The analysis that feeds in to the code transformation.)
-
-#
-# WIP: Working on the evaluation script right now.
-#
-
-WORKDIR /home
-COPY makeEvaluation.sh /home
-COPY scripts /home/scripts
-RUN ./makeEvaluation.sh
-
-#
-# /end WIP
-#
-
 
 # Now, create directory hierarchy for the evaluation.
 # /home
@@ -71,13 +57,30 @@ RUN ./makeEvaluation.sh
 # ----> /query-results
 # ----> /QLDBs
 
-# Set working directory above sources and tests.
+# TODO: Move this up with the other apt stuff when we're done here.
+RUN apt -y install mysql-server
+
+# For debug purposes. Modifying this command will force the image to rebuild from here,
+# to quickly iterate on project setup.
+# ^_____________________________
+
+# Now that we're in home, install MySQL
+# -- opting to not do this ATM, and trying something else later
+# -- postgresql seems easy enough to set up, anyway
 # WORKDIR /home
+# COPY installMySQL.sh /home
+# RUN ./installMySQL.sh
 
-# Make the evaluation
-# COPY makeEvaluation.sh /home
-# RUN ./makeEvaluation.sh
+WORKDIR /home
+COPY misc /home/misc
+COPY makeEvaluation.sh /home
+COPY scripts /home/scripts
+RUN ./makeEvaluation.sh
 
-# Make sure we're still home.
-# WORKDIR /home
+RUN touch /home/qwer
 
+COPY setupProjects.sh /home
+RUN ./setupProjects.sh
+
+COPY seedForDeepDive.sh /home
+RUN ./seedForDeepDive.sh

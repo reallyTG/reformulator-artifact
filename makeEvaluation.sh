@@ -59,4 +59,6 @@ cd employee-tracker
 git checkout orm-refactoring-original
 cd ..
 
+# Move the configs over.
+
 rm /home/makeEvaluation.sh

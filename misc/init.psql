@@ -1,0 +1,5 @@
+CREATE USER reformulator WITH PASSWORD 'passMe';
+
+ALTER USER reformulator createdb;
+
+CREATE DATABASE graceshopper;
