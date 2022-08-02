@@ -273,9 +273,9 @@ The time taken for the refactored handler to prepare a response was much lower, 
 
 This artifact contains the necessary material to investigate RQs 2 through 5.
 For RQ1, we ran the `npm-filter` tool on many hundreds of thousands of GitHub repositories over multiple thousand human hours, and we do not recommend trying to reproduce that.
-We included a spreadsheet with our results for RQ1 in `/home/data` (**TODO this actually**). 
+We included a spreadsheet with our results for RQ1 in `/home/data`, and the final subsection will describe the data. 
 
-Each of the anti-patterns studies are numbered, and a sheet describing them is included in `/home/data` as well (**TODO this actually**).
+Each of the anti-patterns studies are numbered, and a sheet describing them is included in `/home/data` as well.
 The next section will describe how to trigger each of them.
 
 ## Project Details
@@ -483,6 +483,36 @@ You should see a detailed information page open on the right of the browser.
 Navigate to the "Performance" tab, and near the top left you should see a three little buttons: a circle, an arrow going in a circle, and a crossed circle.
 The second is a button to profile the page refresh, and if you click it the page will refresh and once it is done, a profile of the page loading, including visual snapshots, should be available.
 We estimated the time it took from refresh to full data population from this screen, but simply refreshing the page before and after refactoring should give you a sense that the refactoring dramatically improves page loading at larger database sizes.
+
+## **RQ5**
+
+TODO
+
+## Data Description
+
+All of the data we used to create the tables in the paper can be found in `/home/data/ORM_Refactoring_Evaluation.xlsx`.
+We recommend you open this in Excel, or in Google Sheets, since there are many subpages, which we describe below.
+
+- Overall Results: here, each HTTP request handler is assigned a unique ID ('ID' column), and links to the handlers in question are present. 
+Each request handler can have multiple anti-patterns in it, which are counted in the '# APs' column.
+The '# Queries' column states how many queries were generated before and after refactoring (which we counted thanks to the logging we enabled in the projects).
+The 'Before Refactoring' column states average and standard deviation of the times taken to fully execute the handler before refactoring, and 'After Refactoring' is the same except targeting the refactored code.
+'Perf Factor' states the difference in averages before and after refactoring as a factor.
+The final column, 'Notes', is a bit of a misnomer: it's the p-value of a TTest comparing the times drawn before and after refactoring, to confirm the statistical significance of the results.
+One handler (getLeases #20) we found ourselves unable to fire, and didn't count it in the paper.
+- CSV-Friendly Sheet: same as above, just nicer to export and import into other applications (e.g., R, where we made the plots)
+- Raw Times: for each HTTP request (identified by their ID, on the top column), we collected 10 run times before and after refactoring, which are all reported here.
+- Raw Times (for Supplemental): same as above, easier to export.
+- Scaling DB Size Experiment: for each of the five HTTP request handlers in the five applications we selected for our closer look, this sheet reports the times before and after and at the various DB scales. 
+Means and StDevs are reported as well.
+- Scaling_DB_Size_Experiment_Supplemental: easier exporting.
+- Page Load Experiment: for each of the four applications we investigated page load performance, results are reported here at all database scales. 
+A result of * indicates that data loading was complete before animations were completed, so it was not possible to gauge exactly the time.
+- Tool Run Time: lists the running time of the tool in the right hand table.
+The left-hand stuff is a parser for the raw output.
+- Tool Run Times (Raw): the raw tool run times, copy-pasted from terminal.
+- Result Sizes: the number of anti-patterns in various projects.
+- AP Distribution: the distribution of different types of Select N+1 problems across our subject applications.
 
 # Detailed Artifact Description 
 

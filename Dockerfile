@@ -73,6 +73,7 @@ RUN apt -y install mysql-server
 
 WORKDIR /home
 COPY misc /home/misc
+COPY misc/data /home/data
 COPY makeEvaluation.sh /home
 COPY scripts /home/scripts
 RUN ./makeEvaluation.sh
