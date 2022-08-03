@@ -16,7 +16,7 @@ nvm use 16
 # Setup configuration for postgresql user.
 # This overwrites the 'peer' permission on the postgresql user with 'trust',
 # so no password is required.
-cp /home/misc/pg_hba.conf /etc/postgresql/12/main/pg_hba.conf 
+cp /home/misc/pg_hba.conf /etc/postgresql/14/main/pg_hba.conf 
 
 # Start PostgreSQL.
 service postgresql start
@@ -48,7 +48,6 @@ npm i
 cd ..
 # Also copy over the images.
 tar -xf /home/misc/wall-uploads.tar.gz
-mv /home/misc/uploads .
 
 # Database setup:
 cp /home/misc/Configs/wall/.env* .

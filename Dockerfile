@@ -1,25 +1,28 @@
 FROM ubuntu:latest
 ARG DEBIAN_FRONTEND=noninteractive
 
+# Copy helper scripts in.
+COPY installNodeJS.sh setupCodeQL.sh makeEvaluation.sh setupProjects.sh seedForDeepDive.sh /home/
+
+# Create source code directory.
+RUN mkdir -p /home/reformulator
+WORKDIR /home
+
+# Install node first.
+RUN ./installNodeJS.sh
+
 # Fetch prerequisites.
 RUN apt-get update \
-	&& apt-get -y install --no-install-recommends git unzip vim curl npm parallel silversearcher-ag postgresql wget
+	&& apt-get -y install --no-install-recommends git unzip vim npm parallel silversearcher-ag postgresql wget
 # [...] postgresql postgresql-contrib wget
 
 # Need to do this to get Node.js v16 on Debian.
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
-RUN apt-get install -y nodejs
+# RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+# RUN apt-get install -y nodejs
 
 RUN apt update
 
 RUN npm i --g yarn
-
-# Create source code directory.
-RUN mkdir -p /home/reformulator
-
-# Before grabbing sources, install CodeQL. 
-COPY setupCodeQL.sh /home
-WORKDIR /home
 
 # Misc. setup
 RUN git config --global http.sslVerify "false"
@@ -74,14 +77,11 @@ RUN apt -y install mysql-server
 WORKDIR /home
 COPY misc /home/misc
 COPY misc/data /home/data
-COPY makeEvaluation.sh /home
 COPY scripts /home/scripts
 RUN ./makeEvaluation.sh
 
 RUN touch /home/qwer
 
-COPY setupProjects.sh /home
 RUN ./setupProjects.sh
 
-COPY seedForDeepDive.sh /home
 RUN ./seedForDeepDive.sh
