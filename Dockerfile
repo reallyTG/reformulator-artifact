@@ -80,8 +80,6 @@ COPY misc/data /home/data
 COPY scripts /home/scripts
 RUN ./makeEvaluation.sh
 
-RUN touch /home/qwer
-
 RUN ./setupProjects.sh
 
 RUN ./seedForDeepDive.sh
