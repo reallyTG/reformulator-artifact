@@ -590,3 +590,20 @@ JavaScript projects are very annoying to set up, and particularly random web app
 If a user would like to add projects to the Docker image, they can simply clone them into `/home/evaluation/case-studies/`.
 All of the convenience scripts we included work with the directory structure as it is in the container, so as long as new projects are added to that directory things should just work.
 The helper scripts that the Dockerfile makes reference to are documented, so a motivated user should be able to even extend the image permanently with additional projects by modifying `makeEvaluation.sh` and `setupProjects.sh`.
+
+## Additional Queries Over Projects
+
+If a user would like to write more QL queries to run on these JavaScript repositories, they need simply define new .ql files in `/home/reformulator/reformulator-analysis`, and the `runQuery.sh` script can run them.
+As another example, if someone wanted to tinker with how the dataflow between ORM API calls is detected, they could modify the `find-sequelize-flows.ql` file, as long as they keep the final output the same.
+
+## Extending to Other ORMs
+
+If a user would like to extend *Reformulator* to work on other ORMs (e.g., TypeORM, MongoDB), there are two main things to do:
+
+1. Mofify `find-sequelize-flows.ql` with the names of the desired ORM APIs functions.
+Concretely, they can modify the `SequelizeSources` ([link](https://github.com/reallyTG/reformulator-analysis/blob/main/find-sequelize-flows.ql#L9-L13)) and `SequelizeSinks`([link](https://github.com/reallyTG/reformulator-analysis/blob/main/find-sequelize-flows.ql#L15-L19))  classes in the QL file with the names of source and sink ORM API calls in other ORMs.
+This is the easy part.
+
+2. Add additional refactorings for each additional ORM API dataflow pair.
+This is definitely not a simple task, and requires an understand (or a willingness to tinker with) the AST structure in JavaScript, but a very motivated user to add additional refactorings by extending the `transformPair` function in [this](https://github.com/reallyTG/orm-refactoring/blob/main/src/transformations.ts) file.
+The refactoring part of the tool simply reads the output of the QL query, so as before as long as the output has the same general format as what it is currently, new pairs should be able to be added without re-engineering the pipeline.
