@@ -107,7 +107,8 @@ This section describes how to detect the dataflows using CodeQL.
     ./scripts/run-query.sh youtubeclone-backend find-sequelize-flows
 
     # First writes "Compiling query plan for /home/reformulator/reformulator-analysis/find-sequelize-flows.ql."
-    # Then after a time should write "[1/1 eval 9.7s] Evaluation done; writing results to [...]"
+    # Then after a time should write "[1/1 eval _._s] Evaluation done; writing results to [...]"
+    # (This can take some time.)
     ```
 
 3.  The result of these two steps is the creation of a .csv file with the Sequelize dataflows for a project.
@@ -137,6 +138,9 @@ The usual place to find the Sequelize ORM models is in a `.../models/` subdirect
 The `--sequelize-file` option tells the transformation where to find the Sequelize definition file; most associations between models are not defined on the models themselves, but are instead defined in this definition file, e.g., with code like `Model1.hasMany(Model2)`.
 The usual name for such a definition file is `sequelize.js` or `database.js`, and it can typically found near the other ORM files.
 
+(Before proceeding, make sure you are using version 16 of NodeJS.
+To do so, input `nvm use 16` in the terminal.)
+
 Concretely, to transform `youtubeclone`: 
 ```
 node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
@@ -146,7 +150,7 @@ node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
     --sequelize-file=/home/evaluation/case-studies/youtubeclone/youtubeclone-backend/src/sequelize.js
 ```
 
-You should see the following terminal output:
+You should see the following terminal output (and if you get an error, try `nvm use 16` and then re-running the command):
 
 ```
 Finding flows in: /home/evaluation/case-studies/youtubeclone/youtubeclone-backend/src/controllers/user.js
@@ -278,6 +282,7 @@ Any changes that are made in the container will be undone when the container is 
 ### youtubeclone
 
 **To run**: `npm run start` in the `/home/evaluation/case-studies/youtubeclone/youtubeclone-frontend` directory, and `npm run start` in `/home/evaluation/case-studies/youtubeclone/youtubeclone-backend` (please use two different terminals connected to the same container).
+Navigate to `localhost:3000` on your browser.
 Log in with user email "email@email.com", password "email".
 
 **To trigger N+1 problems**: 
@@ -293,6 +298,8 @@ Log in with user email "email@email.com", password "email".
 ### eventbright
 
 **To run**: `npm run start` in `/home/evaluation/case-studies/eventbright/frontend`, `npm run start:development` in `/home/evaluation/case-studies/eventbright/backend` (please use two different terminals connected to the same container).
+(The PostgreSQL service needs to be running for this application; if it isn't, run `service postgresql start`.)
+Navigate to `localhost:3000` on your browser.
 
 **Procedure**: this application is straightforward.
 There are event displayed, and you have various options to filter them.
@@ -311,6 +318,8 @@ You may want to log in to the demo profile by clicking 'Demo' at the top right.
 ### employee-tracker
 
 **To run**: `npm run test` in `/home/evaluation/case-studies/employee-tracker`. There is no separate front end for this application, as it is a simple CLI to the employee server backend.
+(The MySQL service needs to be running for this; if it isn't, run `service mysql start`.)
+CLI is available on the terminal.
 
 **Procedure**: this is a CLI dashboard, navigate with arrow keys and select the desired option.
 
@@ -322,6 +331,8 @@ You may want to log in to the demo profile by clicking 'Demo' at the top right.
 ### property-manage
 
 **To run**: `npm run start:development` in `/home/evaluation/case-studies/property-manage/backend`, `npm run start` in `/home/evaluation/case-studies/property-manage/frontend` (please use two different terminals connected to the same container). 
+(The PostgreSQL service needs to be running for this application; if it isn't, run `service postgresql start`.)
+Navigate to `localhost:3000` on your browser.
 
 **Procedure**: Click 'Login', click 'Demo User'.
 You'll be taken to the main property dashboard.
@@ -337,6 +348,7 @@ You'll be taken to the main property dashboard.
 Run `nvm use 16` when you are done.
 
 **To run**: `npm run start` in `/home/evaluation/case-studies/wall`, and `npm run start` in `/home/evaluation/case-studies/wall/client` (please use two different terminals connected to the same container).
+(The MySQL service needs to be running for this; if it isn't, run `service mysql start`.)
 
 **Procedure**: the first time you start the application, there will be problems, and you will need to make yourself an account (on the left bar, click 'Register').
 When we were testing the application, we created an account 'email@email.com', with 'email' as a password.
@@ -354,6 +366,8 @@ They are in files `schema/images.js` and `schema/groups.js`.
 ### Math_Fluency_App
 
 **To run**: `npm run start` in `/home/evaluation/case-studies/Math_Fluency_App`
+(The MySQL service needs to be running for this; if it isn't, run `service mysql start`.)
+Navigate to `localhost:3000`.
 
 **Procedure**: this is a dashboard to interact with a teacher + students + tests + results database.
 You'll mainly focus on the three requests below.
@@ -369,6 +383,8 @@ Input the requested id (usually 1) in the field, and click "Execute".
 ### Graceshopper-Elektra
 
 **To run**: run `npm run start-dev` in `/home/evaluation/case-studies/Graceshopper-Elektra`.
+(The PostgreSQL service needs to be running for this application; if it isn't, run `service postgresql start`.)
+Navigate to `localhost:3000`.
 
 **Procedure**: at the top right, click 'signup' and create a dummy account (or login with your dummy account).
 Click 'plants', also at the top right---from here, you can trigger the N+1 problem as described below.
@@ -382,7 +398,8 @@ Click 'plants', also at the top right---from here, you can trigger the N+1 probl
 ### NetSteam
 
 **To run**: `npm run start` in `/home/evaluation/case-studies/NetSteam/backend`, `npm run start` in `/home/evaluation/case-studies/NetSteam/frontend` (please use two different terminals connected to the same container).
-You can log in as a demo user.
+(The PostgreSQL service needs to be running for this application; if it isn't, run `service postgresql start`.)
+Navigate to `localhost:3000`.
 
 **Procedure**: at the top right, click 'Demo' log in as a demo user.
 Then, you can click on any of the images to view the user reviews for the game trailer.
@@ -545,3 +562,4 @@ The left-hand stuff is a parser for the raw output.
 - Tool Run Times (Raw): the raw tool run times, copy-pasted from terminal.
 - Result Sizes: the number of anti-patterns in various projects.
 - AP Distribution: the distribution of different types of Select N+1 problems across our subject applications.
+
