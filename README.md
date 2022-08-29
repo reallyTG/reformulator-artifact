@@ -56,6 +56,12 @@ If you lose the container id, simply write `docker ps` and find the container na
 
 When you want to stop the container: `docker stop <container-id>`.
 
+**Note on Memory Usage**: CodeQL is a bit of a memory hog, and if your machine does not offer enough RAM by default the container will not be able to run CodeQL.
+To get around this, run the following command when starting the container to provision it with more memory:
+```
+docker run -d -t -i -e JAVA_OPTS='-Xmx2G' -p 3000:3000 -p 5000:5000 reformulator
+```
+
 ## Container Structure
 
 The structure of the Docker container is as follows:
