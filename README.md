@@ -13,6 +13,7 @@ This artifact is being evaluated in the ASE'22 Artifact track.
 5. Paper Experiment Reproduction
 6. Detailed Artifact Description
 7. Extending the Artifact
+8. Misc Commands
 
 # NOTES
 
@@ -279,6 +280,11 @@ We included a spreadsheet with our results for RQ1 in `/home/data`, and the fina
 
 Each of the anti-patterns studies are numbered, and a sheet describing them is included in `/home/data` as well.
 The next section will describe how to trigger each of them.
+
+## Convenience Script and How to Run the Transformation on All Projects
+
+In `/home/evaluation/scripts`, you'll find a script called `run-experiment.sh`, which runs the analysis and transformation on all projects.
+The script contains the commands needed to run the tool, and the content is copied in the last section of this README for convenience (Section 'Misc Commands').
 
 ## Project Details
 
@@ -607,3 +613,154 @@ This is the easy part.
 2. Add additional refactorings for each additional ORM API dataflow pair.
 This is definitely not a simple task, and requires an understand (or a willingness to tinker with) the AST structure in JavaScript, but a very motivated user to add additional refactorings by extending the `transformPair` function in [this](https://github.com/reallyTG/orm-refactoring/blob/main/src/transformations.ts) file.
 The refactoring part of the tool simply reads the output of the QL query, so as before as long as the output has the same general format as what it is currently, new pairs should be able to be added without re-engineering the pipeline.
+
+## Misc Commands
+
+### To run reformulator on each of the subject applications:
+
+(From `/home/evaluation`, with Node.js version 16 `nvm use 16`.)
+
+#### youtubeclone
+```
+#
+# youtubeclone
+# Build database.
+./scripts/make-database.sh ./case-studies/youtubeclone/ youtubeclone-backend
+
+# Run the query.
+./scripts/run-query.sh youtubeclone-backend find-sequelize-flows
+
+# Run transformation.
+node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
+    --pathTo=/home/evaluation/case-studies/youtubeclone/youtubeclone-backend/ \
+    --flows=/home/evaluation/query-results/find-sequelize-flows/youtubeclone-backend.csv \
+    --models=/home/evaluation/case-studies/youtubeclone/youtubeclone-backend/src/models/ \
+    --sequelize-file=/home/evaluation/case-studies/youtubeclone/youtubeclone-backend/src/sequelize.js
+```
+
+#### eventbright
+```
+#
+# eventbright
+# Build database.
+./scripts/make-database.sh ./case-studies/eventbright/ eventbright
+
+# Run the query.
+./scripts/run-query.sh eventbright find-sequelize-flows
+
+# Run transformation.
+# There isn't really a sequelize-file for this one.
+node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
+    --pathTo=/home/evaluation/case-studies/eventbright/ \
+    --flows=/home/evaluation/query-results/find-sequelize-flows/eventbright.csv \
+    --models=/home/evaluation/case-studies/eventbright/backend/db/models/ \
+    --sequelize-file=/home/evaluation/case-studies/eventbright/backend/db/models/index.js
+```
+
+#### employee-tracker
+```
+#
+# employee-tracker
+# Build database.
+./scripts/make-database.sh ./case-studies/employee-tracker/ employee-tracker
+
+# Run the query.
+./scripts/run-query.sh employee-tracker find-sequelize-flows
+
+# Run transformation.
+# There isn't really a sequelize-file for this one.
+node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
+    --pathTo=/home/evaluation/case-studies/employee-tracker/ \
+    --flows=/home/evaluation/query-results/find-sequelize-flows/employee-tracker.csv \
+    --models=/home/evaluation/case-studies/employee-tracker/models/ \
+    --sequelize-file=/home/evaluation/case-studies/employee-tracker/config/connection.js 
+```
+#### property-manage
+```
+#
+# property-manage
+# Build database.
+./scripts/make-database.sh ./case-studies/property-manage/ property-manage 
+
+# Run the query.
+./scripts/run-query.sh property-manage find-sequelize-flows
+
+# Run transformation.
+node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
+    --pathTo=/home/evaluation/case-studies/property-manage/ \
+    --flows=/home/evaluation/query-results/find-sequelize-flows/property-manage.csv \
+    --models=/home/evaluation/case-studies/property-manage/backend/db/models/ \
+    --sequelize-file=/home/evaluation/case-studies/property-manage/backend/db/models/index.js
+```
+
+#### wall
+```
+#
+# wall
+# Build database.
+./scripts/make-database.sh ./case-studies/wall/ wall
+
+# Run the query.
+./scripts/run-query.sh wall find-sequelize-flows
+
+# Run transformation.
+node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
+    --pathTo=/home/evaluation/case-studies/wall/ \
+    --flows=/home/evaluation/query-results/find-sequelize-flows/wall.csv \
+    --models=/home/evaluation/case-studies/wall/models/ \
+    --sequelize-file=/home/evaluation/case-studies/wall/models/init-models.js
+```
+
+#### Math_Fluency_App
+```
+#
+# Math_Fluency_App
+# Build database.
+./scripts/make-database.sh ./case-studies/Math_Fluency_App/ Math_Fluency_App
+
+# Run the query.
+./scripts/run-query.sh Math_Fluency_App find-sequelize-flows
+
+# Run transformation.
+node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
+    --pathTo=/home/evaluation/case-studies/Math_Fluency_App/ \
+    --flows=/home/evaluation/query-results/find-sequelize-flows/Math_Fluency_App.csv \
+    --models=/home/evaluation/case-studies/Math_Fluency_App/models/ \
+    --sequelize-file=/home/evaluation/case-studies/Math_Fluency_App/database.js
+```
+
+#### Graceshopper-Elektra
+```
+#
+# Graceshopper-Elektra
+# Build database.
+./scripts/make-database.sh ./case-studies/Graceshopper-Elektra/ Graceshopper-Elektra
+
+# Run the query.
+./scripts/run-query.sh Graceshopper-Elektra find-sequelize-flows
+
+# Run transformation.
+node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
+    --pathTo=/home/evaluation/case-studies/Graceshopper-Elektra/ \
+    --flows=/home/evaluation/query-results/find-sequelize-flows/Graceshopper-Elektra.csv \
+    --models=/home/evaluation/case-studies/Graceshopper-Elektra/server/db/models/ \
+    --sequelize-file=/home/evaluation/case-studies/Graceshopper-Elektra/server/db/models/index.js 
+```
+
+#### NetSteam
+```
+#
+# NetSteam
+# Build database.
+./scripts/make-database.sh ./case-studies/NetSteam/ NetSteam
+
+# Run the query.
+./scripts/run-query.sh NetSteam find-sequelize-flows
+
+# Run transformation.
+node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
+    --pathTo=/home/evaluation/case-studies/NetSteam/ \
+    --flows=/home/evaluation/query-results/find-sequelize-flows/NetSteam.csv \
+    --models=/home/evaluation/case-studies/NetSteam/backend/db/models/ \
+    --sequelize-file=/home/evaluation/case-studies/NetSteam/backend/db/models/index.js
+```
