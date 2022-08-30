@@ -13,6 +13,9 @@ nvm use 16
 # Run the query.
 ./scripts/run-query.sh youtubeclone-backend find-sequelize-flows
 
+# Also run the stats query.
+./scripts/run-query.sh youtubeclone-backend getStats
+
 # Run transformation.
 node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
     --pathTo=/home/evaluation/case-studies/youtubeclone/youtubeclone-backend/ \
@@ -27,6 +30,9 @@ node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
 
 # Run the query.
 ./scripts/run-query.sh eventbright find-sequelize-flows
+
+# Also run the stats query.
+./scripts/run-query.sh eventbright getStats
 
 # Run transformation.
 # There isn't really a sequelize-file for this one.
@@ -44,6 +50,9 @@ node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
 # Run the query.
 ./scripts/run-query.sh employee-tracker find-sequelize-flows
 
+# Also run the stats query.
+./scripts/run-query.sh employee-tracker getStats
+
 # Run transformation.
 # There isn't really a sequelize-file for this one.
 node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
@@ -60,6 +69,9 @@ node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
 # Run the query.
 ./scripts/run-query.sh property-manage find-sequelize-flows
 
+# Also run the stats query.
+./scripts/run-query.sh property-manage getStats
+
 # Run transformation.
 node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
     --pathTo=/home/evaluation/case-studies/property-manage/ \
@@ -74,6 +86,9 @@ node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
 
 # Run the query.
 ./scripts/run-query.sh wall find-sequelize-flows
+
+# Also run the stats query.
+./scripts/run-query.sh wall getStats
 
 # Run transformation.
 node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
@@ -90,6 +105,9 @@ node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
 # Run the query.
 ./scripts/run-query.sh Math_Fluency_App find-sequelize-flows
 
+# Also run the stats query.
+./scripts/run-query.sh Math_Fluency_App getStats
+
 # Run transformation.
 node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
     --pathTo=/home/evaluation/case-studies/Math_Fluency_App/ \
@@ -104,6 +122,9 @@ node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
 
 # Run the query.
 ./scripts/run-query.sh Graceshopper-Elektra find-sequelize-flows
+
+# Also run the stats query.
+./scripts/run-query.sh Graceshopper-Elektra getStats
 
 # Run transformation.
 node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
@@ -120,9 +141,17 @@ node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
 # Run the query.
 ./scripts/run-query.sh NetSteam find-sequelize-flows
 
+# Also run the stats query.
+./scripts/run-query.sh NetSteam getStats
+
 # Run transformation.
 node /home/reformulator/orm-refactoring/dist/transform.js --mode=CodeQL \
     --pathTo=/home/evaluation/case-studies/NetSteam/ \
     --flows=/home/evaluation/query-results/find-sequelize-flows/NetSteam.csv \
     --models=/home/evaluation/case-studies/NetSteam/backend/db/models/ \
     --sequelize-file=/home/evaluation/case-studies/NetSteam/backend/db/models/index.js
+
+#
+#
+# Print Table 1
+./scripts/print-table-1.sh
